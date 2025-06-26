@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "type": "module",
+  "workspaces": ["examples", "livestore-drizzle"],
+  "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.17",
+    "@types/node": "^24.0.3",
+    "dprint": "^0.50.0",
+    "typescript": "^5.8.3"
+  }
+}
