@@ -43,26 +43,23 @@ const tables = {
 }
 
 const materializers = State.SQLite.materializers(events, {
-  "v1.TodoCreated": ({ id, text, date }) => {
-    return tables.todos.insert({
+  "v1.TodoCreated": ({ id, text, date }) =>
+    tables.todos.insert({
       id,
       completed: false,
       text,
       lastModified: date,
-    })
-  },
-  "v1.TodoCompleted": ({ id, date }) => {
-    return tables.todos.update({
+    }),
+  "v1.TodoCompleted": ({ id, date }) =>
+    tables.todos.update({
       completed: true,
       lastModified: date,
-    }).where({ id })
-  },
-  "v1.TodoUncompleted": ({ id, date }) => {
-    return tables.todos.update({
+    }).where({ id }),
+  "v1.TodoUncompleted": ({ id, date }) =>
+    tables.todos.update({
       completed: false,
       lastModified: date,
-    }).where({ id })
-  },
+    }).where({ id }),
 })
 
 const schema = makeSchema({
