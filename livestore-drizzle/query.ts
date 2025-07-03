@@ -5,7 +5,7 @@ import {
   SQLiteCustomColumn,
   SQLiteSyncDialect,
 } from "drizzle-orm/sqlite-core"
-import { Record } from "effect"
+import * as Record from "effect/Record"
 
 export const query = <Built extends Pick<AnySQLiteSelectQueryBuilder, "_" | "toSQL">>(
   store: Store<any, any>,
