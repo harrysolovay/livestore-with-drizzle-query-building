@@ -95,14 +95,15 @@ const store = await createStorePromise({
 // )
 
 // Query using Drizzle
-const rows = query(store, (qb) =>
+const rows = query((qb) =>
   qb
     .select()
     .from(tables.books)
     .where(or(
       eq(tables.books.id, 1),
       eq(tables.books.id, 2),
-    )))
+    ))
+).run(store)
 
 console.log(rows)
 

@@ -42,27 +42,32 @@ const tables = {
   }),
 }
 
+const { todos } = toDrizzleTables(tables)
+
 const materializers = State.SQLite.materializers(events, {
-  "v1.TodoCreated": ({ id, text, date }) => {
-    return tables.todos.insert({
-      id,
-      completed: false,
-      text,
-      lastModified: date,
-    })
-  },
-  "v1.TodoCompleted": ({ id, date }) => {
-    return tables.todos.update({
-      completed: true,
-      lastModified: date,
-    }).where({ id })
-  },
-  "v1.TodoUncompleted": ({ id, date }) => {
-    return tables.todos.update({
-      completed: false,
-      lastModified: date,
-    }).where({ id })
-  },
+  "v1.TodoCreated": ({ id, text, date }) =>
+    query((_) => {
+      return _.insert(todos).values({
+        id,
+        lastModified: date,
+        text,
+        completed: false,
+      })
+    }),
+  "v1.TodoCompleted": ({ id, date }) =>
+    query((_) => {
+      return _.update(todos).set({
+        completed: true,
+        lastModified: date,
+      }).where(eq(todos.id, id))
+    }),
+  "v1.TodoUncompleted": ({ id, date }) =>
+    query((_) => {
+      return _.update(todos).set({
+        completed: false,
+        lastModified: date,
+      }).where(eq(todos.id, id))
+    }),
 })
 
 const schema = makeSchema({
@@ -89,42 +94,18 @@ const store = await createStorePromise({
 })
 
 // store.commit(
-//   events.todoCreated({
-//     id: 0,
-//     text: "Make a video about livestore",
-//     date: new Date(),
-//   }),
-//   events.todoCreated({
-//     id: 1,
-//     text: "Indulge the side-quest of making a drizzle query builder adapter for livestore",
+//   events.todoCompleted({
+//     id: 6,
 //     date: new Date(),
 //   }),
 // )
 
-// store.commit(
-//   events.todoUncompleted({
-//     id: 1,
-//     date: new Date(),
-//   }),
-// )
-
-// const maybeTodo = store.query(
-//   tables.todos.where({
-//     id: 1,
-//   }).first({
-//     fallback: () => undefined,
-//   }),
-// )
-
-// console.log(maybeTodo)
-
-const { todos } = toDrizzleTables(tables)
-
-const rows = query(store, (qb) =>
-  qb
+const rows = query((_) =>
+  _
     .select()
     .from(todos)
-    .where(eq(todos.id, 1)))
+    .where(eq(todos.id, 6))
+).run(store)
 
 console.log(rows)
 

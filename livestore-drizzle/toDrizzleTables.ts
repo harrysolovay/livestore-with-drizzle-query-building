@@ -1,7 +1,9 @@
 import { Schema, SqliteDsl, State } from "@livestore/livestore"
 import type { ColumnDataType } from "drizzle-orm"
 import { customType, SQLiteColumn, sqliteTable, type SQLiteTableWithColumns } from "drizzle-orm/sqlite-core"
-import { Option, pipe, Record } from "effect"
+import { pipe } from "effect/Function"
+import * as Option from "effect/Option"
+import * as Record from "effect/Record"
 
 export const toDrizzleTables = <TA extends Record<string, State.SQLite.TableDef.Any>>(
   tables: TA,
@@ -49,6 +51,7 @@ type ToDrizzleTable<T extends LivestoreTable> = SQLiteTableWithColumns<{
           isAutoincrement: false
           hasRuntimeDefault: Column["default"] extends Option.Some<any> ? true : false
           enumValues: undefined
+          generated: undefined
         },
         {},
         {}
